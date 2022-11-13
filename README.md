@@ -31,11 +31,11 @@
 ```
 *request: (APPLICATION/JSON)
 {
-        "author": "kihun.um",
-        "startTime": 11,
-        "endTime": 20,
-        "comment": "testfinal2",
-        "resolved": false
+    "author": "kihun.um",
+    "startTime": 11,
+    "endTime": 20,
+    "comment": "testfinal2",
+    "resolved": false
 }
 
 * response: 
@@ -54,11 +54,11 @@
 ```
 *request: (APPLICATION/JSON)
 {
-        "author": "kihun.um",
-        "startTime": 11,
-        "endTime": 20,
-        "comment": "testfinal2",
-        "resolved": true
+    "author": "kihun.um",
+    "startTime": 11,
+    "endTime": 20,
+    "comment": "testfinal2",
+    "resolved": true
 }
 
 * response: 
