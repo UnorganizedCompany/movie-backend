@@ -1,6 +1,5 @@
 package com.example.moviebackend.config
 
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.File
 
@@ -11,10 +10,6 @@ class FileSystemConfig {
     }
 
     lateinit var fsMap: Map<String?, String>
-
-    @Bean(name = ["json-directory"])
-    fun fileSystem(): Map<String?, String> = this.fsMap
-
 
     fun refreshFileSystem() {
         val workingDir = System.getProperty("user.dir")
