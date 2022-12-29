@@ -21,38 +21,37 @@ class CommentService(
 
     fun findCommentByVideoName(videoName: String): Flux<CommentDto> {
         val commentListJson = fileSystemConfig.fsMap.findFile(videoName)
-        val commentDtoList = convertJsonListToDtoList(commentListJson)
+        val commentDtoList = convertListJsonToDtoList(commentListJson)
         return commentDtoList.toFlux()
     }
 
     fun addCommentByVideoName(videoName: String, comment: CommentDto): Mono<CommentDto> {
         val commentListJson = fileSystemConfig.fsMap.findFile(videoName)
-        val commentDtoList = convertJsonListToDtoList(commentListJson)
-        val newCommentId = commentDtoList.size
-        val addedCommentDtoList = commentDtoList.plus(comment.changeId(newCommentId))
+        val commentDtoList = convertListJsonToDtoList(commentListJson)
+        val commentWithId = comment.changeId(commentDtoList.size)
+        val addedCommentDtoList = commentDtoList.plus(commentWithId)
         writeToFileAndUpdateCache(videoName, addedCommentDtoList)
-        return comment.toMono()
+        return commentWithId.toMono()
     }
 
     fun updateComment(videoName: String, commentId: Int, comment: CommentDto): Mono<CommentDto> {
         val commentListJson = fileSystemConfig.fsMap.findFile(videoName)
-        val sortedCommentDtoList = convertJsonListToDtoList(commentListJson)
-            .sortedBy { it.id }
+        val sortedCommentDtoList = convertListJsonToDtoList(commentListJson)
+        val updatedComment = comment.changeId(commentId)
         val updatedCommentDtoList = sortedCommentDtoList.map {
             if (it.id == commentId) {
-                comment
+                updatedComment
             } else it
         }
         writeToFileAndUpdateCache(videoName, updatedCommentDtoList)
         return comment.toMono()
     }
 
-    private fun convertJsonListToDtoList(commentListJson: String): List<CommentDto> =
+    private fun convertListJsonToDtoList(commentListJson: String): List<CommentDto> =
         gson.fromJson(commentListJson, Array<CommentDto>::class.java).orEmpty().asList()
 
     private fun writeToFileAndUpdateCache(videoName: String, commentDtoList: List<CommentDto>): Unit {
         fileSystemConfig.fsMap.updateFile(videoName, commentDtoList)
         fileSystemConfig.refreshFileSystem()
     }
-
 }
