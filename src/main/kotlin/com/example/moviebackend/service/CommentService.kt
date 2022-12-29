@@ -28,10 +28,10 @@ class CommentService(
     fun addCommentByVideoName(videoName: String, comment: CommentDto): Mono<CommentDto> {
         val commentListJson = fileSystemConfig.fsMap.findFile(videoName)
         val commentDtoList = convertListJsonToDtoList(commentListJson)
-        val commentWithId = comment.changeId(commentDtoList.size)
-        val addedCommentDtoList = commentDtoList.plus(commentWithId)
+        val updatedComment = comment.changeId(commentDtoList.size)
+        val addedCommentDtoList = commentDtoList.plus(updatedComment)
         writeToFileAndUpdateCache(videoName, addedCommentDtoList)
-        return commentWithId.toMono()
+        return updatedComment.toMono()
     }
 
     fun updateComment(videoName: String, commentId: Int, comment: CommentDto): Mono<CommentDto> {
@@ -44,7 +44,7 @@ class CommentService(
             } else it
         }
         writeToFileAndUpdateCache(videoName, updatedCommentDtoList)
-        return comment.toMono()
+        return updatedComment.toMono()
     }
 
     private fun convertListJsonToDtoList(commentListJson: String): List<CommentDto> =
