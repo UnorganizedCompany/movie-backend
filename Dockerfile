@@ -7,7 +7,7 @@ ENV TZ=Asia/Seoul
 
 WORKDIR app
 COPY build/libs/*.jar app.jar
-COPY /src/main/resources/jsons/sample_movie.json /app/jsons/sample_movie.json
+#COPY /src/main/resources/jsons/sample_movie.json /app/jsons/sample_movie.json
 
 # environments
 ENV PGID=1000
